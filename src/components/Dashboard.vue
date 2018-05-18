@@ -68,7 +68,7 @@ export default {
       // Update?
       isUpdate: false,
       // Frame
-      fps: 10,
+      fps: 20,
       now: 0,
       then: 0,
       interval: 0,
@@ -147,7 +147,7 @@ export default {
       this.animate()
     },
     animate: function (){
-      if (this.counter > 10){
+      if (this.counter > 15){
       console.log("counter - ", this.counter);
         this.isUpdate = false
         this.stage.removeChild(this.mask);
