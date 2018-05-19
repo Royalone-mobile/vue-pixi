@@ -149,14 +149,15 @@ export default {
       this.animate()
     },
     animate: function (){
-      if (this.$store.state.sceneIndex === 1 && this.counter === 14)
-        this.counter--
-
       if (this.counter > 15){
         console.log("counter - ", this.counter);
-        this.isUpdate = false
         this.stage.removeChild(this.mask);
-        this.renderer.render(this.stage)
+        if (this.$store.state.sceneIndex === 1) {
+          this.renderer.render(this.stage)
+        } else {
+          this.isUpdate = false
+          this.renderer.render(this.stage)
+        }
       }
 
       if (this.isUpdate) requestAnimationFrame(this.animate)
