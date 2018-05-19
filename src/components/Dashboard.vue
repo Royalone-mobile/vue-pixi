@@ -9,7 +9,7 @@
       <img src="./../assets/images/arrow-down-12.svg" class="arrow-down-12" v-on:click="onClickArrow(2)">
     </div>
     <div class="indicator">
-      <indicator v-for="n in 5" :sceneindex="sceneIndex" :index="n - 1" :title="indicators[n - 1]"></indicator>
+      <indicator v-for="n in 5" :key="n" :sceneindex="sceneIndex" :index="n - 1" :title="indicators[n - 1]"></indicator>
     </div>
     <div class="scene-description">
       <p>{{ sceneDescription.title[sceneIndex] }}</p>
@@ -73,6 +73,8 @@ export default {
       then: 0,
       interval: 0,
       delta: 0,
+      // Video
+      video: null,
     }
   },
   updated (){
@@ -147,8 +149,11 @@ export default {
       this.animate()
     },
     animate: function (){
+      if (this.$store.state.sceneIndex === 1 && this.counter === 14)
+        this.counter--
+
       if (this.counter > 15){
-      console.log("counter - ", this.counter);
+        console.log("counter - ", this.counter);
         this.isUpdate = false
         this.stage.removeChild(this.mask);
         this.renderer.render(this.stage)
@@ -167,12 +172,30 @@ export default {
         this.renderer.render(this.stage)
       }
     },
-    drawBackground: function(bgIndex) {
+    addToPIXI: function (){
+      var texture = PIXI.Texture.fromVideo('static/movies/man-mov_3.mp4')
+      this.bg = new PIXI.Sprite(this.video)
+    },
+    drawBackground: function (bgIndex) {
       this.stage.interactive = true
 
       this.container.position.x = this.renderer.width / 2
       this.container.position.y = this.renderer.height / 2
-      this.bg = PIXI.Sprite.fromImage('static/images/' + bgIndex + '.jpg')
+      console.log(bgIndex)
+      if (bgIndex === 1) {
+        this.video = document.createElement("video");
+        this.video.preload = "auto";
+        this.video.loop = true;              // enable looping
+        // this.video.autoplay = true;          // if PIXI doesn't start it internally
+        // this.video.oncanplay = this.addToPIXI;
+        this.video.src = "static/movies/man-mov_3.mp4";
+
+        var texture = PIXI.Texture.fromVideo(this.video)
+        this.bg = new PIXI.Sprite(texture)
+      } else {
+        this.bg = PIXI.Sprite.fromImage('static/images/' + bgIndex + '.jpg')
+      }
+
       this.bg.anchor.x = .5
       this.bg.anchor.y = .5
       this.bg.position.x = 0
