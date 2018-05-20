@@ -1,3 +1,61 @@
+@font-face {
+ font-family:icomoon;
+ src:url("./../fonts/icomoon.eot?1tmmc0");
+ src:url("./../fonts/icomoon.eot?1tmmc0#iefix") format("embedded-opentype"),url("./../fonts/icomoon.ttf?1tmmc0") format("truetype"),url("./../fonts/icomoon.woff?1tmmc0") format("woff");
+ font-weight:400;
+ font-style:normal
+}
+[class*=" icon-"],[class^=icon-] {
+ font-family:icomoon!important;
+ speak:none;
+ font-style:normal;
+ font-weight:400;
+ font-variant:normal;
+ text-transform:none;
+ line-height:1;
+ -webkit-font-smoothing:antialiased;
+ -moz-osx-font-smoothing:grayscale
+}
+.icon-mail:before {
+ content:"\E900"
+}
+.icon-chevron-down:before {
+ content:"\E901"
+}
+.icon-chevron-up:before {
+ content:"\E903"
+}
+.icon-dribbble:before {
+ content:"\E902"
+}
+.icon-twitter:before {
+ content:"\E904"
+}
+.icon-swipe:before {
+ content:"\E905"
+}
+.icon-close:before {
+ content:"\E906"
+}
+.icon-cross:before {
+ content:"\E907"
+}
+.icon-cross2:before {
+ content:"\E908"
+}
+.icon-grid:before {
+ content:"\E909"
+}
+.icon-heart-outlined:before {
+ content:"\E90A"
+}
+.icon-heart:before {
+ content:"\E90B"
+}
+.icon-chevron-small-left:before {
+ content:"\E90C"
+}
+
 body {
 	margin: 0;
 	padding: 0;
@@ -36,11 +94,25 @@ body {
 		left: 4%;
 		bottom: 30%;
 
-		img {
-			cursor: pointer;
-		}
-		img:first-child {
+		div.up{
 			margin-bottom: 10px;
+			color: white;
+		}
+		div.down{
+			margin-bottom: 0px;
+		}
+		span {
+			cursor: pointer;
+			font-size: 10px;
+			transition: all .3s ease-out;
+			-webkit-backface-visibility: hidden;
+			backface-visibility: hidden;
+			padding: .5rem;
+			color: white;
+		}
+		span:first-child {
+			margin-bottom: 10px;
+			color: white;
 		}
 	}
 	.scene-description {
@@ -117,9 +189,11 @@ body {
 		bottom: 20px;
 		right: 4%;
 
-		img {
+		div {
 			margin-left: 10px;
 			cursor: pointer;
+			display: inline-block;
+			color: white;
 		}
 	}
 	div.free-ninja {

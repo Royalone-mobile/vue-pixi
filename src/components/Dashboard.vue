@@ -5,8 +5,12 @@
       <p class="all-product" v-on:mouseover="onMouseOver(2)" v-on:mouseleave="onMouseLeave(2)">view all projects</p>
     </div>
     <div class="arrows">
-      <img src="./../assets/images/arrow-up-12.svg" class="arrow-up-12" v-on:click="onClickArrow(1)">
-      <img src="./../assets/images/arrow-down-12.svg" class="arrow-down-12" v-on:click="onClickArrow(2)">
+      <div class="up" v-on:mouseover="onMouseOver(3)" v-on:mouseleave="onMouseLeave(3)">
+        <span class="icon-chevron-up arrow-up arrow-up-12" v-on:click="onClickArrow(1)"></span>
+      </div>
+      <div class="down" v-on:mouseover="onMouseOver(4)" v-on:mouseleave="onMouseLeave(4)">
+        <span class="icon-chevron-down arrow-down arrow-up-12" v-on:click="onClickArrow(2)"></span>
+      </div>
     </div>
     <div class="indicator">
       <indicator v-for="n in 5" :key="n" :sceneindex="sceneIndex" :index="n - 1" :title="indicators[n - 1]"></indicator>
@@ -16,8 +20,12 @@
       <p>{{ sceneDescription.desc[sceneIndex] }}</p>
     </div>
     <div class="link">
-      <img src="./../assets/images/email-send-1.svg" class="email-send-1">
-      <img src="./../assets/images/logo-dribbble.svg" class="logo-dribble">
+      <div class="dribbble" v-on:mouseover="onMouseOver(5)" v-on:mouseleave="onMouseLeave(5)">
+        <span class="icon icon-mail"></span>
+      </div>
+      <div class="email" v-on:mouseover="onMouseOver(6)" v-on:mouseleave="onMouseLeave(6)">
+        <span class="icon icon-dribbble""></span>
+      </div>
     </div>
     <div class="free-ninja">
     </div>
@@ -107,7 +115,7 @@ export default {
     document.getElementById("cvs").appendChild(this.renderer.view)
 
     // Frame
-    this.interval = 1001 / this.fps
+    this.interval = 1000 / this.fps
     this.then = Date.now()
 
     // GSAP
@@ -175,8 +183,8 @@ export default {
     },
     animate: function (){
       if (this.counter > 15){
-        console.log("counter - ", this.counter);
-        this.stage.removeChild(this.mask);
+        console.log("counter - ", this.counter)
+        this.stage.removeChild(this.mask)
         if (this.$store.state.sceneIndex === 1) {
           this.renderer.render(this.stage)
         } else {
@@ -198,7 +206,7 @@ export default {
         this.renderer.render(this.stage)
       }
     },
-    drawBackground: function (bgIndex) {
+    drawBackground: function (bgIndex){
       this.stage.interactive = true
 
       this.container.position.x = this.renderer.width / 2
@@ -249,7 +257,7 @@ export default {
       } else if (objectId === 2) {
         if (onOffFlag){
           var element = document.querySelector(".header > .all-product")
-          var start = element.offsetLeft - 20
+          var start = element.offsetLeft - 10
           this.tween1 = TweenMax.fromTo(this.box, 1, 
             {top: "53px", left: start, width: "0px", height: "3px", backgroundColor: "#0f0", }, // 0b3c91
             {left: (start + 70) + "px", width: "10px", ease:Linear.easeNone})
@@ -262,6 +270,47 @@ export default {
         } else {
           this.timeline.kill()
           tween = TweenMax.to(this.box, 0, {width: "0"})
+        }
+      } else if (objectId === 3) {
+        var element = document.querySelector("div.arrows > div.up")
+        var elementSpan = document.querySelector("div.arrows > div.up > span")
+        if (onOffFlag){
+          var tween0 = TweenMax.to(element, 0.3, {css: {marginBottom: 15}})
+          var tween1 = TweenMax.to(elementSpan, 0, {css: {color: '#00f'}})
+        } else {
+          TweenMax.killAll()
+          var tween0 = TweenMax.to(element, 0, {css: {marginBottom: 10}})
+          var tween1 = TweenMax.to(elementSpan, 0, {css: {color: '#fff'}})
+        }
+      } else if (objectId === 4) {
+        var element0 = document.querySelector("div.arrows > div.down")
+        var element1 = document.querySelector("div.arrows > div.up")
+        var elementSpan = document.querySelector("div.arrows > div.down > span")
+        if (onOffFlag){
+          var tween1 = TweenMax.to(element1, 0.3, {css: {marginBottom: 15}})
+          var tween0 = TweenMax.to(element0, 0.3, {css: {marginBottom: -5}})
+          var tween2 = TweenMax.to(elementSpan, 0, {css: {color: '#00f'}})
+        } else {
+          TweenMax.killAll()
+          var tween0 = TweenMax.to(element0, 0, {css: {marginBottom: 0}})
+          var tween1 = TweenMax.to(element1, 0, {css: {marginBottom: 10}})
+          var tween2 = TweenMax.to(elementSpan, 0, {css: {color: '#fff'}})
+        }
+      } else if (objectId === 5) {
+        var element0 = document.querySelector("div.link > div.dribbble > span")
+        if (onOffFlag){
+          var tween1 = TweenMax.to(element0, 0.3, {css: {color: '#008'}})
+        } else {
+          TweenMax.killAll()
+          var tween1 = TweenMax.to(element0, 0.3, {css: {color: '#fff'}})
+        }
+      } else if (objectId === 6) {
+        var element0 = document.querySelector("div.link > div.email > span")
+        if (onOffFlag){
+          var tween1 = TweenMax.to(element0, 0.3, {css: {color: '#008'}})
+        } else {
+          TweenMax.killAll()
+          var tween1 = TweenMax.to(element0, 0.3, {css: {color: '#fff'}})
         }
       }
     },
