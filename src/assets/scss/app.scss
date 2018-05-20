@@ -20,11 +20,14 @@ body {
 		p:first-child {
 			font-size: 10px;
 			font-style: italic;
+			margin-top: 14px;
+			width: 90px;
 		}
 		p:last-child {
 			font-size: 14px;
 			float: right;
 			text-align: right;
+			width: 100px;
 		}
 	}
 	.arrows {
@@ -118,6 +121,11 @@ body {
 			margin-left: 10px;
 			cursor: pointer;
 		}
+	}
+	div.free-ninja {
+		position: absolute;
+		width: 0;
+		height: 0;
 	}
 	#cvs {
 		position: absolute;

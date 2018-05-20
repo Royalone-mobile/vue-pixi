@@ -1,8 +1,8 @@
 <template lang="html">
   <div>
     <div class="header">
-      <p class="name">Ramin Tahbaz-Salehi</p>
-      <p class="all-product">view all projects</p>
+      <p class="name" v-on:mouseover="onMouseOver(1)" v-on:mouseleave="onMouseLeave(1)">Ramin Tahbaz-Salehi</p>
+      <p class="all-product" v-on:mouseover="onMouseOver(2)" v-on:mouseleave="onMouseLeave(2)">view all projects</p>
     </div>
     <div class="arrows">
       <img src="./../assets/images/arrow-up-12.svg" class="arrow-up-12" v-on:click="onClickArrow(1)">
@@ -19,12 +19,15 @@
       <img src="./../assets/images/email-send-1.svg" class="email-send-1">
       <img src="./../assets/images/logo-dribbble.svg" class="logo-dribble">
     </div>
+    <div class="free-ninja">
+    </div>
     <div id="cvs">
     </div>
   </div>
 </template>
 <script>
-import {Container, WebGLRenderer, Sprite, Graphics, Filter, Matrix} from './../assets/javascripts/pixi.min.js'
+import { Container, WebGLRenderer, Sprite, Graphics, Filter, Matrix } from './../assets/javascripts/pixi.min.js'
+import { TimelineMax, TweenMax } from "gsap"
 
 import { mapState } from 'vuex';
 
@@ -75,6 +78,14 @@ export default {
       delta: 0,
       // Video
       video: null,
+      // objectFlag
+      // overObjectFlag: 0,
+      // GSAP
+      tween1: null,
+      tween2: null,
+      timeline: null,
+      // DOM
+      box: null,
     }
   },
   updated (){
@@ -98,11 +109,25 @@ export default {
     // Frame
     this.interval = 1001 / this.fps
     this.then = Date.now()
+
+    // GSAP
+    this.timeline = new TimelineMax({repeat:1000})
+
+    // DOM
+    this.box = document.getElementsByClassName("free-ninja")[0]
     
     this.onReload()
   },
   methods: {
-    onClickArrow: function(direction){
+    onMouseOver: function (objectId){
+      console.log("over - ", objectId)
+      this.gsapFunc(objectId, true)
+    },
+    onMouseLeave: function (objectId){
+      console.log("leave - ", objectId)
+      this.gsapFunc(objectId, false)
+    },
+    onClickArrow: function (direction){
       var index = this.$store.state.sceneIndex
       if (direction === 1) index--
       else if (direction === 2) index++
@@ -116,7 +141,7 @@ export default {
       this.height = window.innerHeight
       this.container.removeChild(this.bg)
       this.drawBackground(this.$store.state.sceneIndex)
-      this.onClick()
+      // this.onClick()
     },
     onResize(event) {
       this.width = window.innerWidth
@@ -173,10 +198,6 @@ export default {
         this.renderer.render(this.stage)
       }
     },
-    addToPIXI: function (){
-      var texture = PIXI.Texture.fromVideo('static/movies/man-mov_3.mp4')
-      this.bg = new PIXI.Sprite(this.video)
-    },
     drawBackground: function (bgIndex) {
       this.stage.interactive = true
 
@@ -188,7 +209,6 @@ export default {
         this.video.preload = "auto";
         this.video.loop = true;              // enable looping
         // this.video.autoplay = true;          // if PIXI doesn't start it internally
-        // this.video.oncanplay = this.addToPIXI;
         this.video.src = "static/movies/man-mov_3.mp4";
 
         var texture = PIXI.Texture.fromVideo(this.video)
@@ -207,7 +227,44 @@ export default {
       this.container.addChild(this.bg)
       this.stage.addChild(this.container)
       this.renderer.render(this.stage)
-    }
+    },
+    gsapFunc: function (objectId, onOffFlag){
+      if (objectId === 1){
+        if (onOffFlag){
+          var element = document.querySelector(".header > .name")
+          var start = element.offsetLeft - 20
+          this.tween1 = TweenMax.fromTo(this.box, 1, 
+            {top: "50px", left: start, width: "0px", height: "3px", backgroundColor: "#0f0", }, // 0b3c91
+            {left: (start + 60) + "px", width: "10px", ease:Linear.easeNone})
+          this.tween2 = TweenMax.fromTo(this.box, 1, 
+            {left: (start + 60) + "px"},
+            {left: (start + 120) + "px", width: "0px"})
+
+          this.timeline.clear()
+          this.timeline.add([this.tween1, this.tween2], "+=0", "sequence")
+        } else {
+          this.timeline.kill()
+          tween = TweenMax.to(this.box, 0, {width: "0"})
+        }
+      } else if (objectId === 2) {
+        if (onOffFlag){
+          var element = document.querySelector(".header > .all-product")
+          var start = element.offsetLeft - 20
+          this.tween1 = TweenMax.fromTo(this.box, 1, 
+            {top: "53px", left: start, width: "0px", height: "3px", backgroundColor: "#0f0", }, // 0b3c91
+            {left: (start + 70) + "px", width: "10px", ease:Linear.easeNone})
+          this.tween2 = TweenMax.fromTo(this.box, 1, 
+            {left: (start + 70) + "px"},
+            {left: (start + 140) + "px", width: "0px"})
+
+          this.timeline.clear()
+          this.timeline.add([this.tween1, this.tween2], "+=0", "sequence")
+        } else {
+          this.timeline.kill()
+          tween = TweenMax.to(this.box, 0, {width: "0"})
+        }
+      }
+    },
   },
   computed: mapState({
     sceneIndex: state => state.sceneIndex
